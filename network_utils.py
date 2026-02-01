@@ -12,6 +12,26 @@ from config import UDP_PORT, TCP_PORT, BROADCAST_INTERVAL, BUFFER_SIZE
 from config import DISCOVERY_TIMEOUT, RECEIVED_FILES_DIR
 
 
+def get_local_ip():
+    """
+    Get the local IP address of the machine.
+    Uses a connection-less UDP socket logic to determine the correct interface/IP
+    without actually connecting to an external server.
+    """
+    try:
+        # Create a dummy socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # We don't actually have to connect, but using a private range IP
+        # helps the OS choose the correct interface.
+        # 10.255.255.255 is a non-routable broadcast address in the 10.x.x.x private range.
+        s.connect(("10.255.255.255", 1))
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except Exception:
+        return "127.0.0.1"
+
+
 class DeviceDiscovery:
     """Handles UDP broadcast for device discovery"""
     
@@ -47,14 +67,7 @@ class DeviceDiscovery:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         
         # Get local IP address
-        try:
-            # Connect to external address to get local IP
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            local_ip = s.getsockname()[0]
-            s.close()
-        except:
-            local_ip = "127.0.0.1"
+        local_ip = get_local_ip()
         
         message = json.dumps({
             "type": "RECEIVER_BROADCAST",

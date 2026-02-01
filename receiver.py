@@ -12,7 +12,7 @@ import time
 import platform
 import threading
 from gesture_detector import GestureDetector
-from network_utils import DeviceDiscovery
+from network_utils import DeviceDiscovery, get_local_ip
 from config import RECEIVED_FILES_DIR, TCP_PORT, BUFFER_SIZE
 from config import CAMERA_INDEX, CAMERA_WIDTH, CAMERA_HEIGHT
 
@@ -28,14 +28,7 @@ class FileReceiver:
         
     def get_local_ip(self):
         """Get local IP address"""
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            local_ip = s.getsockname()[0]
-            s.close()
-            return local_ip
-        except:
-            return "127.0.0.1"
+        return get_local_ip()
     
     def wait_for_open_pinch_gesture(self, file_info):
         """Open camera and wait for open pinch gesture to accept file"""
