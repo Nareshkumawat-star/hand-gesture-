@@ -11,9 +11,10 @@ BUFFER_SIZE = 4096  # File transfer buffer size (4KB chunks)
 DISCOVERY_TIMEOUT = 10  # Seconds to wait for receiver discovery
 
 # Gesture Detection Configuration
-PINCH_THRESHOLD = 0.05  # Distance threshold for pinch detection (normalized)
+PINCH_THRESHOLD = 0.08  # Distance threshold for pinch detection (higher = easier to trigger)
+OPEN_PINCH_THRESHOLD = 0.15  # Distance threshold for open pinch detection (spread fingers)
 GESTURE_HOLD_TIME = 0.5  # Seconds to hold gesture before triggering
-CONFIDENCE_THRESHOLD = 0.7  # Minimum hand detection confidence
+CONFIDENCE_THRESHOLD = 0.3  # Minimum hand detection confidence (lower = detects hands more easily)
 
 # Camera Configuration
 CAMERA_INDEX = 0  # Default webcam index
